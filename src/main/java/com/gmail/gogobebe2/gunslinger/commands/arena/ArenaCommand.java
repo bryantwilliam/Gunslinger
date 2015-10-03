@@ -5,7 +5,7 @@ import com.gmail.gogobebe2.gunslinger.commands.MultidimensionalCommand;
 
 import java.util.Map;
 
-public class ArenaCommand extends MultidimensionalCommand {
+public final class ArenaCommand extends MultidimensionalCommand {
     @Override
     protected Map<String, Command> initializeLegalSubCommands() {
         return null;
