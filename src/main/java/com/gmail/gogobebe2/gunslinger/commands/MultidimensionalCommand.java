@@ -23,8 +23,8 @@ public abstract class MultidimensionalCommand extends Command {
                 legalSubCommands.get(subCommandLabel).onCommand(commandSender, subArgs);
             }
             else {
-                commandSender.sendMessage(ChatColor.RED + "Error! " + ChatColor.AQUA + subCommandLabel
-                        + ChatColor.RED + " is not an appropriate sub-command!");
+                commandSender.sendMessage(ChatColor.RED + "Error! " + ChatColor.AQUA +
+                        subCommandLabel + ChatColor.RED + " is not an appropriate sub-command!");
                 showHelpMenu(commandSender);
             }
         }
