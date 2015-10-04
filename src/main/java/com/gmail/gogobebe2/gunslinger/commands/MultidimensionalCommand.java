@@ -34,6 +34,9 @@ public abstract class MultidimensionalCommand extends Command {
     protected abstract Map<String, Command> initializeLegalSubCommands();
 
     private void showHelpMenu(CommandSender commandSender) {
-
+        commandSender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Error! These are the only legal parameters:");
+        for (String legalSubCommand : legalSubCommands.keySet()) {
+            commandSender.sendMessage(ChatColor.DARK_RED + " - " + legalSubCommand);
+        }
     }
 }
