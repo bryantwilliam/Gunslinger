@@ -12,7 +12,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,19 +23,20 @@ import java.util.Map;
 
 public class ArenaSelectionManager {
     private static List<ArenaSelectionManager> arenaSelectionManagers = new ArrayList<>();
+    private static final ItemStack WAND = initWand();
 
     private Player player;
     private Point point1;
     private Point point2;
     private Main plugin;
 
-    protected ArenaSelectionManager(Player player, Main plugin) {
+    private ArenaSelectionManager(Player player, Main plugin) {
         this.player = player;
         this.plugin = plugin;
         arenaSelectionManagers.add(this);
     }
 
-    protected void setPoint(Action action, int x, int z, String worldName) {
+    private void setPoint(Action action, int x, int z, String worldName) {
         Point point;
         if (action == Action.LEFT_CLICK_BLOCK) {
             if (point1 == null) point1 = new Point();
@@ -54,6 +57,30 @@ public class ArenaSelectionManager {
         private String worldName;
     }
 
+    private static ItemStack initWand() {
+        ItemStack wand = new ItemStack(Material.STICK, 1);
+        ItemMeta meta = wand.getItemMeta();
+        meta.setDisplayName(ChatColor.BLUE + "" + ChatColor.BOLD + "WAND");
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.AQUA + "Left click to select point 1");
+        lore.add(ChatColor.AQUA + "Right click to select point 2");
+        lore.add(ChatColor.BLUE + "Type " + ChatColor.DARK_BLUE + "/gs arena confirm" + ChatColor.BLUE + " when you're done");
+        meta.setLore(lore);
+        wand.setItemMeta(meta);
+        return wand;
+    }
+
+    private static boolean isWand(ItemStack item) {
+        if (item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            ItemMeta wandMeta = WAND.getItemMeta();
+            if (meta.hasLore() && meta.getLore().equals(wandMeta.getLore()) && meta.hasDisplayName()
+                    && meta.getDisplayName().equals(wandMeta.getDisplayName())) return true;
+        }
+        return false;
+    }
+
     public static class SelectionListener implements Listener {
         private Main plugin;
 
@@ -62,10 +89,9 @@ public class ArenaSelectionManager {
         }
 
         @EventHandler
-        protected void onSelect(PlayerInteractEvent event) {
+        private void onSelect(PlayerInteractEvent event) {
             Action action = event.getAction();
-            // TODO test if they have wand.
-            if (action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
+            if (isWand(event.getItem()) && (action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK)) {
                 Block block = event.getClickedBlock();
                 Player player = event.getPlayer();
                 new ArenaSelectionManager(player, plugin).setPoint(action, block.getX(), block.getZ(), block.getWorld().getName());
@@ -137,8 +163,13 @@ public class ArenaSelectionManager {
     private static final class ArenaWandCommand extends Command {
         @Override
         protected void onCommand(CommandSender commandSender, String[] args) {
-            ItemStack wand = new ItemStack(Material.STICK, 1);
-            // TODO
+            if (commandSender instanceof Player) {
+                Player player = (Player) commandSender;
+                if (!player.getInventory().addItem(WAND).isEmpty())
+                    player.sendMessage(ChatColor.BLUE + "A wand has been added to your inventory.");
+                else player.sendMessage(ChatColor.RED + "Error! Your inventory is full.");
+            }
+            else commandSender.sendMessage(ChatColor.RED + "Error! You have to be a player to use this command!");
         }
     }
 }
