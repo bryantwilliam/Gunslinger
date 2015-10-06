@@ -51,8 +51,8 @@ public class ArenaSelectionManager {
         point.worldName = worldName;
         point.x = x;
         point.z = z;
-        player.sendMessage(ChatColor.GREEN + pointName + " has just been set at x:" + ChatColor.DARK_GREEN + x
-                + ChatColor.GREEN + " and z:" + ChatColor.DARK_GREEN + z);
+        player.sendMessage(ChatColor.GREEN + pointName + " has just been set at " + ChatColor.DARK_GREEN + "x:" + x
+                + ChatColor.GREEN + " and " + ChatColor.DARK_GREEN + "z:" + z);
     }
 
     private class Point {
@@ -98,7 +98,12 @@ public class ArenaSelectionManager {
             if (isWand(event.getItem()) && (action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK)) {
                 Block block = event.getClickedBlock();
                 Player player = event.getPlayer();
-                new ArenaSelectionManager(player, plugin).setPoint(action, block.getX(), block.getZ(), block.getWorld().getName());
+                ArenaSelectionManager arenaSelectionManager = null;
+                for (ArenaSelectionManager manager : arenaSelectionManagers)
+                    if (manager.player.getUniqueId().equals(player.getUniqueId())) arenaSelectionManager = manager;
+                if (arenaSelectionManager == null)
+                    arenaSelectionManager = new ArenaSelectionManager(player, plugin);
+                arenaSelectionManager.setPoint(action, block.getX(), block.getZ(), block.getWorld().getName());
                 event.setCancelled(true);
             }
         }
@@ -157,7 +162,7 @@ public class ArenaSelectionManager {
             plugin.getConfig().set("Arenas." + worldName + "." + arenaName + ".point2.z", arenaSelectionManager.point2.z);
 
             player.sendMessage(ChatColor.GREEN + "Arena " + ChatColor.DARK_GREEN + arenaName + ChatColor.GREEN
-                    +  " has been set in world " + ChatColor.DARK_GREEN + worldName + ChatColor.GREEN + " at "
+                    + " has been set in world " + ChatColor.DARK_GREEN + worldName + ChatColor.GREEN + " at "
                     + ChatColor.DARK_GREEN + "x:" + arenaSelectionManager.point1.x + ", z:" + arenaSelectionManager.point1.z
                     + ChatColor.GREEN + " and " + ChatColor.DARK_GREEN + "x: " + arenaSelectionManager.point2.x + ", z:"
                     + arenaSelectionManager.point2.z + ChatColor.GREEN + ".");
@@ -172,8 +177,7 @@ public class ArenaSelectionManager {
                 if (player.getInventory().addItem(WAND).isEmpty())
                     player.sendMessage(ChatColor.BLUE + "A wand has been added to your inventory.");
                 else player.sendMessage(ChatColor.RED + "Error! Your inventory is full.");
-            }
-            else commandSender.sendMessage(ChatColor.RED + "Error! You have to be a player to use this command!");
+            } else commandSender.sendMessage(ChatColor.RED + "Error! You have to be a player to use this command!");
         }
     }
 }
