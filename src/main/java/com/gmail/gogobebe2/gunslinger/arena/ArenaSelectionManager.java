@@ -165,7 +165,7 @@ public class ArenaSelectionManager {
         protected void onCommand(CommandSender commandSender, String[] args) {
             if (commandSender instanceof Player) {
                 Player player = (Player) commandSender;
-                if (!player.getInventory().addItem(WAND).isEmpty())
+                if (player.getInventory().addItem(WAND).isEmpty())
                     player.sendMessage(ChatColor.BLUE + "A wand has been added to your inventory.");
                 else player.sendMessage(ChatColor.RED + "Error! Your inventory is full.");
             }
