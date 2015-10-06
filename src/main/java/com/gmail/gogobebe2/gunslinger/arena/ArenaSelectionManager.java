@@ -117,6 +117,15 @@ public class ArenaSelectionManager {
             subCommands.put("wand", new ArenaWandCommand());
             return subCommands;
         }
+
+        @Override
+        protected void onCommand(CommandSender commandSender, String[] args) {
+            if (!commandSender.hasPermission("gs.arena.*")) {
+                commandSender.sendMessage(ChatColor.RED + "Error! You do not have permission to use this command!");
+                return;
+            }
+            super.onCommand(commandSender, args);
+        }
     }
 
     private static final class ArenaConfirmCommand extends Command {
