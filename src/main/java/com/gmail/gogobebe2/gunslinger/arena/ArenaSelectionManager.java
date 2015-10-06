@@ -154,12 +154,36 @@ public class ArenaSelectionManager {
                 player.sendMessage(ChatColor.RED + "Error! Point number 1 is not in the same world as point number 2!");
                 return;
             }
+            int minX = Math.min(arenaSelectionManager.point1.x, arenaSelectionManager.point2.x);
+            int maxX = Math.max(arenaSelectionManager.point1.x, arenaSelectionManager.point2.x);
+            int minZ = Math.min(arenaSelectionManager.point1.z, arenaSelectionManager.point2.z);
+            int maxZ = Math.max(arenaSelectionManager.point1.z, arenaSelectionManager.point2.z);
+
+            if (arenaSelectionManager.plugin.getConfig().isSet("Arenas." + worldName)) {
+                for (String arena : arenaSelectionManager.plugin.getConfig()
+                        .getConfigurationSection("Arenas." + worldName).getKeys(false)) {
+                    for (int x = minX; x <= maxX; x++) {
+                        for (int z = minZ; z <= maxZ; z++) {
+                            if (arenaSelectionManager.plugin.getConfig()
+                                    .getInt("Arenas." + worldName + "." + arena + ".z") == z
+                                    || arenaSelectionManager.plugin.getConfig()
+                                    .getInt("Arenas." + worldName + "." + arena + ".x") == x) {
+                                player.sendMessage(ChatColor.RED + "Error! The selected area overlaps arena "
+                                        + ChatColor.GREEN + arena + ChatColor.RED + "!");
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
 
             Main plugin = arenaSelectionManager.plugin;
             plugin.getConfig().set("Arenas." + worldName + "." + arenaName + ".point1.x", arenaSelectionManager.point1.x);
             plugin.getConfig().set("Arenas." + worldName + "." + arenaName + ".point1.z", arenaSelectionManager.point1.z);
             plugin.getConfig().set("Arenas." + worldName + "." + arenaName + ".point2.x", arenaSelectionManager.point2.x);
             plugin.getConfig().set("Arenas." + worldName + "." + arenaName + ".point2.z", arenaSelectionManager.point2.z);
+            plugin.saveConfig();
 
             player.sendMessage(ChatColor.GREEN + "Arena " + ChatColor.DARK_GREEN + arenaName + ChatColor.GREEN
                     + " has been set in world " + ChatColor.DARK_GREEN + worldName + ChatColor.GREEN + " at "
