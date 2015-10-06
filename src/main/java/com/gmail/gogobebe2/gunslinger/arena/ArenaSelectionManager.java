@@ -38,17 +38,21 @@ public class ArenaSelectionManager {
 
     private void setPoint(Action action, int x, int z, String worldName) {
         Point point;
+        String pointName;
         if (action == Action.LEFT_CLICK_BLOCK) {
             if (point1 == null) point1 = new Point();
             point = point1;
+            pointName = "Point 1";
         } else {
             if (point2 == null) point2 = new Point();
             point = point2;
+            pointName = "Point 2";
         }
-
         point.worldName = worldName;
         point.x = x;
         point.z = z;
+        player.sendMessage(ChatColor.GREEN + pointName + " has just been set at x:" + ChatColor.DARK_GREEN + x
+                + ChatColor.GREEN + " and z:" + ChatColor.DARK_GREEN + z);
     }
 
     private class Point {
