@@ -10,7 +10,7 @@ import java.util.Map;
 public final class MainCommand extends MultidimensionalCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, org.bukkit.command.Command cmd, String alias, String[] args) {
-        onCommand(commandSender, args.length > 0 ? null : args);
+        onCommand(commandSender, args.length == 0 ? null : args);
         return true;
     }
 
