@@ -18,7 +18,7 @@ public abstract class MultidimensionalCommand extends Command {
         if (args != null) {
             String subCommandLabel = args[0];
             String[] subArgs = null;
-            if (args.length != 1) subArgs = Arrays.copyOfRange(args, 1, args.length - 1);
+            if (args.length > 1) subArgs = Arrays.copyOfRange(args, 1, args.length);
             if (legalSubCommands.containsKey(subCommandLabel)) {
                 legalSubCommands.get(subCommandLabel).onCommand(commandSender, subArgs);
             }

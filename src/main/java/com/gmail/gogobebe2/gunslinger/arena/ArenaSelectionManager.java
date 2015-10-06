@@ -72,7 +72,7 @@ public class ArenaSelectionManager {
     }
 
     private static boolean isWand(ItemStack item) {
-        if (item.hasItemMeta()) {
+        if (item != null && item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
             ItemMeta wandMeta = WAND.getItemMeta();
             if (meta.hasLore() && meta.getLore().equals(wandMeta.getLore()) && meta.hasDisplayName()
