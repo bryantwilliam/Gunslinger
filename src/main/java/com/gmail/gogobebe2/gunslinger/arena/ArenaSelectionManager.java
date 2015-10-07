@@ -128,6 +128,7 @@ public class ArenaSelectionManager {
         }
     }
 
+
     private static final class ArenaConfirmCommand extends Command {
         @Override
         protected void onCommand(CommandSender commandSender, String[] args) {
@@ -168,24 +169,23 @@ public class ArenaSelectionManager {
             int minZ = Math.min(arenaSelectionManager.point1.z, arenaSelectionManager.point2.z);
             int maxZ = Math.max(arenaSelectionManager.point1.z, arenaSelectionManager.point2.z);
 
+
             if (arenaSelectionManager.plugin.getConfig().isSet("Arenas." + worldName)) {
                 for (String arena : arenaSelectionManager.plugin.getConfig()
                         .getConfigurationSection("Arenas." + worldName).getKeys(false)) {
-                    for (int x = minX; x <= maxX; x++) {
-                        for (int z = minZ; z <= maxZ; z++) {
-                            if (arenaSelectionManager.plugin.getConfig()
-                                    .getInt("Arenas." + worldName + "." + arena + ".z") == z
-                                    || arenaSelectionManager.plugin.getConfig()
-                                    .getInt("Arenas." + worldName + "." + arena + ".x") == x) {
-                                player.sendMessage(ChatColor.RED + "Error! The selected area overlaps arena "
-                                        + ChatColor.GREEN + arena + ChatColor.RED + "!");
-                                return;
-                            }
-                        }
+                    int comparedZ1 = arenaSelectionManager.plugin.getConfig().getInt("Arenas." + worldName + "." + arena + "point1.z");
+                    int comparedX1 = arenaSelectionManager.plugin.getConfig().getInt("Arenas." + worldName + "." + arena + "point1.x");
+                    int comparedZ2 = arenaSelectionManager.plugin.getConfig().getInt("Arenas." + worldName + "." + arena + "point2.z");
+                    int comparedX2 = arenaSelectionManager.plugin.getConfig().getInt("Arenas." + worldName + "." + arena + "point2.x");
+
+                    if (!(in(minX, maxX, Math.min(comparedX1, comparedX2), Math.max(comparedX1, comparedX2))
+                            || in(minZ, maxZ, Math.min(comparedZ1, comparedZ2), Math.max(comparedZ1, comparedZ2)))) {
+                        player.sendMessage(ChatColor.RED + "Error! The selected area overlaps arena "
+                                + ChatColor.GREEN + arena + ChatColor.RED + "!");
+                        return;
                     }
                 }
             }
-
 
             Main plugin = arenaSelectionManager.plugin;
             plugin.getConfig().set("Arenas." + worldName + "." + arenaName + ".point1.x", arenaSelectionManager.point1.x);
@@ -199,6 +199,10 @@ public class ArenaSelectionManager {
                     + ChatColor.DARK_GREEN + "x:" + arenaSelectionManager.point1.x + ", z:" + arenaSelectionManager.point1.z
                     + ChatColor.GREEN + " and " + ChatColor.DARK_GREEN + "x: " + arenaSelectionManager.point2.x + ", z:"
                     + arenaSelectionManager.point2.z + ChatColor.GREEN + ".");
+        }
+
+        private static boolean in(int min1, int max1, int min2, int max2) {
+            return max1 < min2 || min1 > max2;
         }
     }
 
