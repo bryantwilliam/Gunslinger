@@ -1,6 +1,6 @@
 package com.gmail.gogobebe2.gunslinger.commands;
 
-import com.gmail.gogobebe2.gunslinger.arena.ArenaSelectionManager;
+import com.gmail.gogobebe2.gunslinger.selection.SelectionCommand;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
@@ -17,7 +17,7 @@ public final class MainCommand extends MultidimensionalCommand implements Comman
     @Override
     protected Map<String, Command> initializeLegalSubCommands() {
         Map<String, Command> subCommands = new HashMap<>();
-        subCommands.put("arena", new ArenaSelectionManager.ArenaCommand());
+        subCommands.put("select", new SelectionCommand());
         return subCommands;
     }
 }
