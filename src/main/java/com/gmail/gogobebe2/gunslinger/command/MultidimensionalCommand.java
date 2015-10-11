@@ -1,4 +1,4 @@
-package com.gmail.gogobebe2.gunslinger.commands;
+package com.gmail.gogobebe2.gunslinger.command;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

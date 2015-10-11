@@ -1,7 +1,7 @@
 package com.gmail.gogobebe2.gunslinger;
 
 import com.gmail.gogobebe2.gunslinger.selection.SelectionListener;
-import com.gmail.gogobebe2.gunslinger.commands.MainCommand;
+import com.gmail.gogobebe2.gunslinger.command.MainCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

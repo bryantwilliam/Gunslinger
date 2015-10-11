@@ -1,14 +1,14 @@
 package com.gmail.gogobebe2.gunslinger.selection;
 
-import com.gmail.gogobebe2.gunslinger.commands.Command;
-import com.gmail.gogobebe2.gunslinger.commands.MultidimensionalCommand;
+import com.gmail.gogobebe2.gunslinger.command.Command;
+import com.gmail.gogobebe2.gunslinger.command.MultidimensionalCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public final class SelectionCommand extends MultidimensionalCommand {
+public class SelectionCommand extends MultidimensionalCommand {
     @Override
     protected Map<String, Command> initializeLegalSubCommands() {
         Map<String, Command> subCommands = new HashMap<>();

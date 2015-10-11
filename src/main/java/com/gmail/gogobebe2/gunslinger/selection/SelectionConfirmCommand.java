@@ -1,12 +1,12 @@
 package com.gmail.gogobebe2.gunslinger.selection;
 
 import com.gmail.gogobebe2.gunslinger.Main;
-import com.gmail.gogobebe2.gunslinger.commands.Command;
+import com.gmail.gogobebe2.gunslinger.command.Command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class SelectionConfirmCommand extends Command {
+public final class SelectionConfirmCommand extends Command {
     @Override
     protected void onCommand(CommandSender commandSender, String[] args) {
         if (!(commandSender instanceof Player)) {

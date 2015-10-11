@@ -1,4 +1,4 @@
-package com.gmail.gogobebe2.gunslinger.commands;
+package com.gmail.gogobebe2.gunslinger.command;
 
 import com.gmail.gogobebe2.gunslinger.selection.SelectionCommand;
 import org.bukkit.command.CommandExecutor;
