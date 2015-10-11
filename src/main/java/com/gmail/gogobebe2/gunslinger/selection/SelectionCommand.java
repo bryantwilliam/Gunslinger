@@ -13,6 +13,7 @@ public final class SelectionCommand extends MultidimensionalCommand {
     protected Map<String, Command> initializeLegalSubCommands() {
         Map<String, Command> subCommands = new HashMap<>();
         subCommands.put("confirm", new SelectionConfirmCommand());
+        subCommands.put("delete", new SelectionDeleteCommand());
         subCommands.put("wand", new SelectionWandCommand());
         return subCommands;
     }
