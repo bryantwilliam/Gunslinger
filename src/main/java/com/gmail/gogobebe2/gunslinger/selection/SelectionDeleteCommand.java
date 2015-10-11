@@ -19,12 +19,12 @@ public class SelectionDeleteCommand extends Command {
             player.sendMessage(ChatColor.RED + "You did not enter an arena name as a parameter. This means you are deleting the lobby instead.");
             name = "LOBBY";
         }
-        else name = args[0];
-        String worldname = player.getWorld().getName();
+        else name = args[0].toLowerCase();
+        String worldName = player.getWorld().getName();
         Main plugin = Main.getInstance();
-        plugin.getConfig().set("Selections." + worldname + "." + name, null);
+        plugin.getConfig().set("Selections." + worldName + "." + name, null);
         plugin.saveConfig();
         player.sendMessage(ChatColor.GREEN + "Selection " + ChatColor.DARK_GREEN + name + ChatColor.GREEN
-                + " has been removed in world " + ChatColor.DARK_GREEN + worldname);
+                + " has been removed in world " + ChatColor.DARK_GREEN + worldName);
     }
 }

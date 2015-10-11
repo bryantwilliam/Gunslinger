@@ -1,5 +1,5 @@
 name: Gunslinger
-version: 1.3.3-DEVELOPMENT-SNAPSHOT
+version: 1.3.4-DEVELOPMENT-SNAPSHOT
 main: com.gmail.gogobebe2.gunslinger.Main
 description: A player is chosen at each match to be a gunslinger. His objective is to kill everyone else in the match. The other players will be trying to be the last one alive by killing other players in the match. Although, obviously, they also need to be constantly watching out for the gunslinger.
 author: William Bryant (gogobebe2)
