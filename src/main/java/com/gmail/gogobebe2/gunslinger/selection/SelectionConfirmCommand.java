@@ -32,54 +32,55 @@ public class SelectionConfirmCommand extends Command {
             return;
         }
 
-        String worldName = selectionManager.getPoint1().worldName;
-        if (!(worldName.equals(selectionManager.getPoint2().worldName))) {
-            player.sendMessage(ChatColor.RED + "Error! Point number 1 is not in the same world as point number 2!");
-            return;
-        }
-
         String name;
         if (args.length == 0) {
             player.sendMessage(ChatColor.RED + "You did not enter an arena name as a parameter. This means you are setting the lobby instead.");
             name = "LOBBY";
         }
-        else name = args[0];
+        else name = args[0].toLowerCase();
+        String worldName = selectionManager.getPoint1().worldName;
+        int p1x = selectionManager.getPoint1().x;
+        int p1z = selectionManager.getPoint1().z;
+        int p2x = selectionManager.getPoint2().x;
+        int p2z = selectionManager.getPoint2().z;
 
-        int minX = Math.min(selectionManager.getPoint1().x, selectionManager.getPoint2().x);
-        int maxX = Math.max(selectionManager.getPoint1().x, selectionManager.getPoint2().x);
-        int minZ = Math.min(selectionManager.getPoint1().z, selectionManager.getPoint2().z);
-        int maxZ = Math.max(selectionManager.getPoint1().z, selectionManager.getPoint2().z);
+        if (!(worldName.equals(selectionManager.getPoint2().worldName))) {
+            player.sendMessage(ChatColor.RED + "Error! Point number 1 is not in the same world as point number 2!");
+            return;
+        }
 
         Main plugin = Main.getInstance();
 
-        if (plugin.getConfig().isSet("Selections." + worldName)) {
+        if (plugin.getConfig().isSet("Selections")) {
             for (String selection : plugin.getConfig()
-                    .getConfigurationSection("Selections." + worldName).getKeys(false)) {
-                int comparedZ1 = plugin.getConfig().getInt("Selections." + worldName + "." + selection + "point1.z");
-                int comparedX1 = plugin.getConfig().getInt("Selections." + worldName + "." + selection + "point1.x");
-                int comparedZ2 = plugin.getConfig().getInt("Selections." + worldName + "." + selection + "point2.z");
-                int comparedX2 = plugin.getConfig().getInt("Selections." + worldName + "." + selection + "point2.x");
+                    .getConfigurationSection("Selections").getKeys(false)) {
+                if (plugin.getConfig().getString("Selections." + selection + ".world").equals(worldName)) {
+                    int compared1z = plugin.getConfig().getInt("Selections." + selection + ".point1.z");
+                    int compared1x = plugin.getConfig().getInt("Selections." + selection + ".point1.x");
+                    int compared2z = plugin.getConfig().getInt("Selections." + selection + ".point2.z");
+                    int compared2x = plugin.getConfig().getInt("Selections." + selection + ".point2.x");
 
-                if (!(in(minX, maxX, Math.min(comparedX1, comparedX2), Math.max(comparedX1, comparedX2))
-                        || in(minZ, maxZ, Math.min(comparedZ1, comparedZ2), Math.max(comparedZ1, comparedZ2)))) {
-                    player.sendMessage(ChatColor.RED + "Error! The selected selection overlaps selection "
-                            + ChatColor.GREEN + selection + ChatColor.RED + "!");
-                    return;
+                    if (!(in(Math.min(p1x, p2x), Math.max(p1x, p2x), Math.min(compared1x, compared2x), Math.max(compared1x, compared2x))
+                            || in(Math.min(p1z, p2z), Math.max(p1z, p2z), Math.min(compared1z, compared2z), Math.max(compared1z, compared2z)))) {
+                        player.sendMessage(ChatColor.RED + "Error! The selected selection overlaps selection "
+                                + ChatColor.GREEN + selection + ChatColor.RED + "!");
+                        return;
+                    }
                 }
             }
         }
 
-        plugin.getConfig().set("Selections." + worldName + "." + name + ".point1.x", selectionManager.getPoint1().x);
-        plugin.getConfig().set("Selections." + worldName + "." + name + ".point1.z", selectionManager.getPoint1().z);
-        plugin.getConfig().set("Selections." + worldName + "." + name + ".point2.x", selectionManager.getPoint2().x);
-        plugin.getConfig().set("Selections." + worldName + "." + name + ".point2.z", selectionManager.getPoint2().z);
+        plugin.getConfig().set("Selections." + worldName + "." + name + ".point1.x", p1x);
+        plugin.getConfig().set("Selections." + worldName + "." + name + ".point1.z", p1z);
+
+        plugin.getConfig().set("Selections." + worldName + "." + name + ".point2.x", p2x);
+        plugin.getConfig().set("Selections." + worldName + "." + name + ".point2.z", p2z);
         plugin.saveConfig();
 
         player.sendMessage(ChatColor.GREEN + "Selection " + ChatColor.DARK_GREEN + name + ChatColor.GREEN
                 + " has been set in world " + ChatColor.DARK_GREEN + worldName + ChatColor.GREEN + " at "
-                + ChatColor.DARK_GREEN + "x:" + selectionManager.getPoint1().x + ", z:" + selectionManager.getPoint1().z
-                + ChatColor.GREEN + " and " + ChatColor.DARK_GREEN + "x: " + selectionManager.getPoint2().x + ", z:"
-                + selectionManager.getPoint2().z + ChatColor.GREEN + ".");
+                + ChatColor.DARK_GREEN + "x:" + p1x + ", z:" + p1z + ChatColor.GREEN + " and " + ChatColor.DARK_GREEN
+                + "x: " + p2x + ", z:" + p2z + ChatColor.GREEN + ".");
     }
 
     private static boolean in(int min1, int max1, int min2, int max2) {
