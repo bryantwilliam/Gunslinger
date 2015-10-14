@@ -52,19 +52,21 @@ public final class SelectionConfirmCommand extends Command {
         Main plugin = Main.getInstance();
 
         if (plugin.getConfig().isSet("Selections")) {
-            for (String selection : plugin.getConfig()
+            for (String comparedWorldName : plugin.getConfig()
                     .getConfigurationSection("Selections").getKeys(false)) {
-                if (plugin.getConfig().getString("Selections." + selection + ".world").equals(worldName)) {
-                    int compared1z = plugin.getConfig().getInt("Selections." + selection + ".point1.z");
-                    int compared1x = plugin.getConfig().getInt("Selections." + selection + ".point1.x");
-                    int compared2z = plugin.getConfig().getInt("Selections." + selection + ".point2.z");
-                    int compared2x = plugin.getConfig().getInt("Selections." + selection + ".point2.x");
+                if (plugin.getConfig().getString("Selections." + comparedWorldName + ".world").equals(worldName)) {
+                    for (String comparedName : plugin.getConfig().getConfigurationSection("Selections." + comparedWorldName).getKeys(false)) {
+                        int compared1z = plugin.getConfig().getInt("Selections." + comparedWorldName + "." + comparedName + ".point1.z");
+                        int compared1x = plugin.getConfig().getInt("Selections." + comparedWorldName + "." + comparedName + ".point1.x");
+                        int compared2z = plugin.getConfig().getInt("Selections." + comparedWorldName + "." + comparedName + ".point2.z");
+                        int compared2x = plugin.getConfig().getInt("Selections." + comparedWorldName + "." + comparedName + ".point2.x");
 
-                    if (!(in(Math.min(p1x, p2x), Math.max(p1x, p2x), Math.min(compared1x, compared2x), Math.max(compared1x, compared2x))
-                            || in(Math.min(p1z, p2z), Math.max(p1z, p2z), Math.min(compared1z, compared2z), Math.max(compared1z, compared2z)))) {
-                        player.sendMessage(ChatColor.RED + "Error! The selected selection overlaps selection "
-                                + ChatColor.GREEN + selection + ChatColor.RED + "!");
-                        return;
+                        if (!(in(Math.min(p1x, p2x), Math.max(p1x, p2x), Math.min(compared1x, compared2x), Math.max(compared1x, compared2x))
+                                || in(Math.min(p1z, p2z), Math.max(p1z, p2z), Math.min(compared1z, compared2z), Math.max(compared1z, compared2z)))) {
+                            player.sendMessage(ChatColor.RED + "Error! The selected selection overlaps selection "
+                                    + ChatColor.GREEN + comparedWorldName + ChatColor.RED + "!");
+                            return;
+                        }
                     }
                 }
             }
