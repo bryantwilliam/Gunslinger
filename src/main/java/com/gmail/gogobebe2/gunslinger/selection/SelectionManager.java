@@ -25,28 +25,16 @@ public class SelectionManager {
     }
 
     protected void setPoint(Action action, int x, int z, String worldName) {
-        Point point;
         String pointName;
         if (action == Action.LEFT_CLICK_BLOCK) {
-            if (point1 == null) point1 = new Point();
-            point = point1;
+            point1 = new Point(x, z, worldName);
             pointName = "Point 1";
         } else {
-            if (point2 == null) point2 = new Point();
-            point = point2;
+            point2 = new Point(x, z, worldName);
             pointName = "Point 2";
         }
-        point.worldName = worldName;
-        point.x = x;
-        point.z = z;
         player.sendMessage(ChatColor.GREEN + pointName + " has just been set at " + ChatColor.DARK_GREEN + "x:" + x
                 + ChatColor.GREEN + " and " + ChatColor.DARK_GREEN + "z:" + z);
-    }
-
-    protected class Point {
-        protected int x;
-        protected int z;
-        protected String worldName;
     }
 
     private static ItemStack initWand() {
