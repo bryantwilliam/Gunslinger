@@ -65,7 +65,7 @@ public final class Kits {
                     return;
                 }
                 Player player = (Player) commandSender;
-                // TODO: Setup player for that kit later.
+                // TODO: Sellect kit for that player later on when the game starts.
                 apply(finalName, player);
             }
         });

@@ -5,7 +5,7 @@ import com.gmail.gogobebe2.gunslinger.command.Command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class KitDeleteCommand extends Command {
+public final class KitDeleteCommand extends Command {
     @Override
     protected void onCommand(CommandSender commandSender, String[] args) {
         if (!commandSender.hasPermission("gs.kits.modify")) {

@@ -9,12 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class KitCommand extends MultidimensionalCommand {
+    private static Map<String, Command> legalSubCommands = new HashMap<>();
+
     @Override
     protected Map<String, Command> initializeLegalSubCommands() {
-        Map<String, Command> subCommands = new HashMap<>();
-        subCommands.put("create", new KitCreateCommand());
-        subCommands.put("delete", new KitDeleteCommand());
-        return subCommands;
+        legalSubCommands.put("create", new KitCreateCommand());
+        legalSubCommands.put("delete", new KitDeleteCommand());
+        return legalSubCommands;
     }
 
     @Override
@@ -27,6 +28,6 @@ public class KitCommand extends MultidimensionalCommand {
     }
 
     protected static Map<String, Command> getLegalSubCommands() {
-        return getLegalSubCommands();
+        return legalSubCommands;
     }
 }

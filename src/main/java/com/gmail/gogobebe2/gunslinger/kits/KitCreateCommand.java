@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class KitCreateCommand extends Command {
+public final class KitCreateCommand extends Command {
     @Override
     protected void onCommand(CommandSender commandSender, String[] args) {
         if (!commandSender.hasPermission("gs.kits.modify")) {
