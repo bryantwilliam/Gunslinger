@@ -1,4 +1,4 @@
-package com.gmail.gogobebe2.gunslinger.selection;
+package com.gmail.gogobebe2.gunslinger.selection.define;
 
 public class Point {
     protected int x;

@@ -1,4 +1,4 @@
-package com.gmail.gogobebe2.gunslinger.kits;
+package com.gmail.gogobebe2.gunslinger.selection.define;
 
 import com.gmail.gogobebe2.gunslinger.command.Command;
 import com.gmail.gogobebe2.gunslinger.command.MultidimensionalCommand;
@@ -8,26 +8,23 @@ import org.bukkit.command.CommandSender;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KitCommand extends MultidimensionalCommand {
-    private static Map<String, Command> legalSubCommands = new HashMap<>();
-
+public class SelectionMainCommand extends MultidimensionalCommand {
     @Override
     protected Map<String, Command> initializeLegalSubCommands() {
-        legalSubCommands.put("create", new KitCreateCommand());
-        legalSubCommands.put("delete", new KitDeleteCommand());
-        return legalSubCommands;
+        Map<String, Command> subCommands = new HashMap<>();
+        subCommands.put("confirm", new SelectionConfirmCommand());
+        subCommands.put("delete", new SelectionDeleteCommand());
+        subCommands.put("wand", new SelectionWandCommand());
+        subCommands.put("setspawn", new SelectionSetspawnCommand());
+        return subCommands;
     }
 
     @Override
     protected void onCommand(CommandSender commandSender, String[] args) {
-        if (!commandSender.hasPermission("gs.select.*")) {
+        if (!commandSender.hasPermission("gs.select")) {
             commandSender.sendMessage(ChatColor.RED + "Error! You do not have permission to use this command!");
             return;
         }
         super.onCommand(commandSender, args);
-    }
-
-    protected static Map<String, Command> getLegalSubCommands() {
-        return legalSubCommands;
     }
 }

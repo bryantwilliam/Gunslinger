@@ -1,5 +1,6 @@
 package com.gmail.gogobebe2.gunslinger.selection;
 
+import com.gmail.gogobebe2.gunslinger.selection.define.Point;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectionManager {
-    protected static List<SelectionManager> selectionManagers = new ArrayList<>();
-    protected static final ItemStack WAND = initWand();
+    public static List<SelectionManager> selectionManagers = new ArrayList<>();
+    public static final ItemStack WAND = initWand();
 
     private Player player;
     private Point point1;
@@ -51,13 +52,13 @@ public class SelectionManager {
         return wand;
     }
 
-    protected Player getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
-    protected Point getPoint1() {
+    public Point getPoint1() {
         return this.point1;
     }
-    protected Point getPoint2() {
+    public Point getPoint2() {
         return this.point2;
     }
 }

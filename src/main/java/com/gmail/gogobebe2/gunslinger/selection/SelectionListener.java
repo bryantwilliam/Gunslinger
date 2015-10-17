@@ -9,9 +9,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-/**
- * Created by william on 11/10/15.
- */
 public class SelectionListener implements Listener {
     private static boolean isWand(ItemStack item) {
         if (item != null && item.hasItemMeta()) {

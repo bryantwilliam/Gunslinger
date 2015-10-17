@@ -51,7 +51,7 @@ public final class Kits {
         }
         plugin.saveConfig();
         final String finalName = name;
-        KitCommand.getLegalSubCommands().put("name", new Command() {
+        KitMainCommand.getLegalSubCommands().put("name", new Command() {
             @Override
             protected void onCommand(CommandSender commandSender, String[] args) {
                 Permission permission = new Permission("gs.kits.use." + finalName);
@@ -65,7 +65,7 @@ public final class Kits {
                     return;
                 }
                 Player player = (Player) commandSender;
-                // TODO: Sellect kit for that player later on when the lobby starts.
+                // TODO: Select kit for that player later on when the lobby starts.
                 apply(finalName, player);
             }
         });

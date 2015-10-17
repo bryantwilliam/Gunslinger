@@ -1,7 +1,8 @@
-package com.gmail.gogobebe2.gunslinger.selection;
+package com.gmail.gogobebe2.gunslinger.selection.define;
 
 import com.gmail.gogobebe2.gunslinger.Main;
 import com.gmail.gogobebe2.gunslinger.command.Command;
+import com.gmail.gogobebe2.gunslinger.selection.SelectionManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
