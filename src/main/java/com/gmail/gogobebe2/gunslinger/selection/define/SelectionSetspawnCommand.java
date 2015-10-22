@@ -18,13 +18,25 @@ public class SelectionSetspawnCommand extends PlayerCommand {
         else name = args[0].toLowerCase();
         String worldName = player.getWorld().getName();
         Main plugin = Main.getInstance();
-        if (!Main.getInstance().getConfig().isSet("Selections." + worldName + "." + name)) {
+        if (!plugin.getConfig().isSet("Selections." + worldName + "." + name)) {
             player.sendMessage(ChatColor.RED + "Error! " + ChatColor.DARK_RED + name + ChatColor.RED
                     + " hasn't been set yet!");
             return;
         }
         Location location = player.getLocation();
-        new SpawnData(location).saveToConfig("Selections." + location.getWorld().getName() + "." + name);
-        player.sendMessage(ChatColor.GREEN + "Selection " + ChatColor.DARK_GREEN + name + "s " + ChatColor.GREEN + "spawn has been set!");
+        if (name.equals("LOBBY")) {
+            new SpawnData(location).saveToConfig("Selections." + location.getWorld().getName() + "." + name + ".spawn");
+            player.sendMessage(ChatColor.GREEN + "Lobby's spawn has been set!");
+        }
+        else {
+            String configPrefix = "Selections." + location.getWorld().getName() + "." + name + ".spawns";
+            int nextID = 0;
+            for (String idString : plugin.getConfig().getConfigurationSection(configPrefix).getKeys(false)) {
+                int id = Integer.parseInt(idString);
+                if (nextID <= id) nextID = id + 1;
+            }
+            new SpawnData(location).saveToConfig("Selections." + location.getWorld().getName() + "." + name + "." + nextID);
+            player.sendMessage(ChatColor.GREEN + "New spawn for selection " + ChatColor.DARK_GREEN + name + ChatColor.GREEN + " has been set!");
+        }
     }
 }

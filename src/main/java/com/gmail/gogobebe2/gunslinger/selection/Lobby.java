@@ -27,13 +27,21 @@ public class Lobby extends Selection {
             int p1z = plugin.getConfig().getInt(configPrefix + "." + arenaName + "point1.z");
             int p2x = plugin.getConfig().getInt(configPrefix + "." + arenaName + "point2.x");
             int p2z = plugin.getConfig().getInt(configPrefix + "." + arenaName + "point2.z");
-            Location spawn = new SpawnData(configPrefix + "." + arenaName).getLocation();
             Point point1 = new Point(p1x, p1z, worldName);
             Point point2 = new Point(p2x, p2z, worldName);
             if (arenaName.equals("LOBBY")) {
-                set(point1, point2, spawn);
-                this.world = world;
-            } else possibleArenas.add(new Arena(arenaName, point1, point2, spawn));
+                if (plugin.getConfig().isSet(configPrefix + "." + arenaName + ".spawn")) {
+                    Location spawn = new SpawnData(configPrefix + "." + arenaName + ".spawn").getLocation();
+                    set(point1, point2, spawn);
+                    this.world = world;
+                } else {
+                    plugin.getLogger().severe("No spawn set for lobby in world " + worldName);
+                    return;
+                }
+            } else {
+                // TODO: get all spawns for arenas from config.
+                // possibleArenas.add(new Arena(arenaName, point1, point2, spawns));
+            }
         }
     }
 
