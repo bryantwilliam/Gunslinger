@@ -13,9 +13,9 @@ import java.util.Set;
 
 public class Lobby extends Selection {
     private List<Arena> possibleArenas = new ArrayList<>();
-    private List<Player> players = new ArrayList<>();
+    private Set<Player> players = new HashSet<>();
     private World world;
-    private LobbyState state = LobbyState.WAITNG;
+    private LobbyState state = LobbyState.WAITING;
 
     private static List<Lobby> lobbies = new ArrayList<>();
 
@@ -52,9 +52,17 @@ public class Lobby extends Selection {
         lobbies.add(this);
     }
 
-    protected List<Player> getPlayers() {
-        return players;
+    protected boolean isPlayerInside(Player player) {
+        return players.contains(player);
     }
 
-    private enum LobbyState {WAITNG, VOTING, STARTING}
+    protected void join(Player player) {
+        players.add(player);
+    }
+
+    protected void leave(Player player) {
+        players.remove(player);
+    }
+
+    private enum LobbyState {WAITING, VOTING, STARTING}
 }
