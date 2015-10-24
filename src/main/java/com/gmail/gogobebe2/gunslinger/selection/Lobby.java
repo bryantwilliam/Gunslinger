@@ -1,10 +1,13 @@
 package com.gmail.gogobebe2.gunslinger.selection;
 
 import com.gmail.gogobebe2.gunslinger.Main;
+import com.gmail.gogobebe2.gunslinger.Timer;
 import com.gmail.gogobebe2.gunslinger.selection.define.Point;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +19,10 @@ public class Lobby extends Selection {
     private Set<Player> players = new HashSet<>();
     private World world;
     private LobbyState state = LobbyState.WAITING;
+    private Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+    private LobbyTimer timer;
+    private static final short MIN_PLAYERS = 3;
+    private static final String STARTING_TIME = "1:30";
 
     private static List<Lobby> lobbies = new ArrayList<>();
 
@@ -45,12 +52,13 @@ public class Lobby extends Selection {
                     for (String id : plugin.getConfig().getConfigurationSection(configPrefix + "." + arenaName).getKeys(false))
                         spawns.add(new SpawnData(configPrefix + "." + arenaName + "." + id).getLocation());
                     possibleArenas.add(new Arena(arenaName, point1, point2, spawns.toArray(new Location[spawns.size()])));
-                }
-                else plugin.getLogger().severe("No spawn set for arena " + arenaName + " in world " + worldName);
+                } else plugin.getLogger().severe("No spawn set for arena " + arenaName + " in world " + worldName);
             }
         }
+        timer = new LobbyTimer();
         lobbies.add(this);
     }
+
 
     protected boolean isPlayerInside(Player player) {
         return players.contains(player);
@@ -64,5 +72,34 @@ public class Lobby extends Selection {
         players.remove(player);
     }
 
-    private enum LobbyState {WAITING, VOTING, STARTING}
+    private enum LobbyState {WAITING, STARTING}
+
+    public class LobbyTimer extends Timer {
+        @Override
+        protected void run() {
+            // TODO: scoreboard shit
+            if (state == LobbyState.STARTING) {
+                if (isTimerRunning() && players.size() < MIN_PLAYERS) {
+                    // TODO: Display on scoreboard ChatColor.RED + "---------"
+                    state = LobbyState.WAITING;
+                }
+            } else {
+                if (isTimerRunning() && players.size() >= MIN_PLAYERS) {
+                    setTime(STARTING_TIME);
+                    state = LobbyState.STARTING;
+                }
+            }
+        }
+
+        @Override
+        protected void pause() {
+            if (state == LobbyState.WAITING) {
+                setTime(Integer.MAX_VALUE + ":");
+                start();
+            }
+            else {
+                //  TODO: START GAME
+            }
+        }
+    }
 }
