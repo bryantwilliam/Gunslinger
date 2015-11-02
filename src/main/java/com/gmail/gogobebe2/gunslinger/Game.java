@@ -8,5 +8,5 @@ import java.util.List;
 
 public class Game {
     private List<Player> players = new ArrayList<>();
-    Arena arena;
+    private Arena arena;
 }

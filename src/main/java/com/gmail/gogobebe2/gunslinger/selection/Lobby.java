@@ -3,6 +3,7 @@ package com.gmail.gogobebe2.gunslinger.selection;
 import com.gmail.gogobebe2.gunslinger.Main;
 import com.gmail.gogobebe2.gunslinger.Timer;
 import com.gmail.gogobebe2.gunslinger.selection.define.Point;
+import com.gmail.gogobebe2.gunslinger.selection.define.SpawnData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,6 +24,7 @@ public class Lobby extends Selection {
     private LobbyTimer timer;
     private static final short MIN_PLAYERS = 3;
     private static final String STARTING_TIME = "1:30";
+    private static final String GAME_TIME = "15:00";
 
     private static List<Lobby> lobbies = new ArrayList<>();
 
@@ -42,7 +44,7 @@ public class Lobby extends Selection {
 
             if (arenaName.equals("LOBBY")) {
                 if (plugin.getConfig().isSet(configPrefix + ".LOBBY.spawn")) {
-                    Location spawn = new SpawnData(configPrefix + ".LOBBY.spawn").getLocation();
+                    Location spawn = new SpawnData(configPrefix + ".LOBBY.spawn").loadFromConfig();
                     set(point1, point2, spawn);
                     this.world = world;
                 } else plugin.getLogger().severe("No spawn set for lobby in world " + worldName);
@@ -50,7 +52,7 @@ public class Lobby extends Selection {
                 if (plugin.getConfig().isSet(configPrefix + "." + arenaName + ".spawns")) {
                     Set<Location> spawns = new HashSet<>();
                     for (String id : plugin.getConfig().getConfigurationSection(configPrefix + "." + arenaName).getKeys(false))
-                        spawns.add(new SpawnData(configPrefix + "." + arenaName + "." + id).getLocation());
+                        spawns.add(new SpawnData(configPrefix + "." + arenaName + "." + id).loadFromConfig());
                     possibleArenas.add(new Arena(arenaName, point1, point2, spawns.toArray(new Location[spawns.size()])));
                 } else plugin.getLogger().severe("No spawn set for arena " + arenaName + " in world " + worldName);
             }
@@ -58,7 +60,6 @@ public class Lobby extends Selection {
         timer = new LobbyTimer();
         lobbies.add(this);
     }
-
 
     protected boolean isPlayerInside(Player player) {
         return players.contains(player);
@@ -99,6 +100,8 @@ public class Lobby extends Selection {
             }
             else {
                 //  TODO: START GAME
+                setTime(GAME_TIME);
+                start();
             }
         }
     }

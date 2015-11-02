@@ -10,10 +10,12 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("Starting up " + this.getName() + ". If you need me to update this plugin, email at gogobebe2@gmail.com");
         instance = this;
+        getLogger().info("Starting up " + this.getName() + ". If you need me to update this plugin, email at gogobebe2@gmail.com");
         Bukkit.getPluginManager().registerEvents(new SelectionListener(), this);
-        Bukkit.getPluginManager().registerEvents(new WorldListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerManager(), this);
+        Bukkit.getPluginManager().registerEvents(new LobbyChooser(), this);
+
         getCommand("gunslinger").setExecutor(new MainCommand());
     }
 

@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SelectionMainCommand extends MultidimensionalCommand {
+public final class SelectionMainCommand extends MultidimensionalCommand {
     @Override
     protected Map<String, Command> initializeLegalSubCommands() {
         Map<String, Command> subCommands = new HashMap<>();

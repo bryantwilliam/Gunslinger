@@ -43,11 +43,11 @@ public abstract class Timer {
         if (!isTimerRunning) {
             this.isTimerRunning = true;
         }
-        final Timer outside = this;
+        final Timer OUTSIDE = this;
         this.timerIncrementer = scheduler.scheduleSyncRepeatingTask(plugin, new Runnable() {
             @Override
             public void run() {
-                outside.run();
+                OUTSIDE.run();
                 if (seconds != 0 || minutes != 0) {
                     seconds--;
                     if (seconds == -1) {
