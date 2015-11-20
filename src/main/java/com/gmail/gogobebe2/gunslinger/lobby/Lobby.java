@@ -1,13 +1,17 @@
-package com.gmail.gogobebe2.gunslinger.selection;
+package com.gmail.gogobebe2.gunslinger.lobby;
 
 import com.gmail.gogobebe2.gunslinger.Main;
-import com.gmail.gogobebe2.gunslinger.Timer;
+import com.gmail.gogobebe2.gunslinger.scoreboard.StatusLobbySection;
+import com.gmail.gogobebe2.gunslinger.selection.Arena;
+import com.gmail.gogobebe2.gunslinger.selection.Selection;
 import com.gmail.gogobebe2.gunslinger.selection.define.Point;
 import com.gmail.gogobebe2.gunslinger.selection.define.SpawnData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
@@ -21,14 +25,19 @@ public class Lobby extends Selection {
     private World world;
     private LobbyState state = LobbyState.WAITING;
     private Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+    private StatusLobbySection statusLobbySection;
     private LobbyTimer timer;
-    private static final short MIN_PLAYERS = 3;
-    private static final String STARTING_TIME = "1:30";
-    private static final String GAME_TIME = "15:00";
+    protected static final short MIN_PLAYERS = 3;
+    protected static final String STARTING_TIME = "1:30";
+    protected static final String GAME_TIME = "15:00";
 
     private static List<Lobby> lobbies = new ArrayList<>();
 
     protected Lobby(World world) {
+        Objective sideObjective = getObjective(scoreboard, "side_obj");
+        sideObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        this.statusLobbySection = new StatusLobbySection(scoreboard, sideObjective, this);
+
         String worldName = world.getName();
         String configPrefix = "Selections." + worldName;
         Main plugin = Main.getInstance();
@@ -57,8 +66,19 @@ public class Lobby extends Selection {
                 } else plugin.getLogger().severe("No spawn set for arena " + arenaName + " in world " + worldName);
             }
         }
-        timer = new LobbyTimer();
+        timer = new LobbyTimer(this);
         lobbies.add(this);
+    }
+
+    private Objective getObjective(Scoreboard scoreboard, String name) {
+        if (!scoreboard.getObjectives().isEmpty()) {
+            for (Objective objective : scoreboard.getObjectives()) {
+                if (objective.getName().equals(name)) {
+                    return scoreboard.getObjective(name);
+                }
+            }
+        }
+        return scoreboard.registerNewObjective(name, "dummy");
     }
 
     protected boolean isPlayerInside(Player player) {
@@ -67,42 +87,29 @@ public class Lobby extends Selection {
 
     protected void join(Player player) {
         players.add(player);
+        player.setScoreboard(scoreboard);
     }
 
     protected void leave(Player player) {
         players.remove(player);
     }
 
-    private enum LobbyState {WAITING, STARTING}
+    public LobbyState getState() {
+        return state;
+    }
+    protected void setState(LobbyState state) {
+        this.state = state;
+    }
 
-    public class LobbyTimer extends Timer {
-        @Override
-        protected void run() {
-            // TODO: scoreboard shit
-            if (state == LobbyState.STARTING) {
-                if (isTimerRunning() && players.size() < MIN_PLAYERS) {
-                    // TODO: Display on scoreboard ChatColor.RED + "---------"
-                    state = LobbyState.WAITING;
-                }
-            } else {
-                if (isTimerRunning() && players.size() >= MIN_PLAYERS) {
-                    setTime(STARTING_TIME);
-                    state = LobbyState.STARTING;
-                }
-            }
-        }
+    protected short getPlayerAmount() {
+        return (short) players.size();
+    }
 
-        @Override
-        protected void pause() {
-            if (state == LobbyState.WAITING) {
-                setTime(Integer.MAX_VALUE + ":");
-                start();
-            }
-            else {
-                //  TODO: START GAME
-                setTime(GAME_TIME);
-                start();
-            }
-        }
+    public LobbyTimer getTimer() {
+        return this.timer;
+    }
+
+    protected StatusLobbySection getStatusLobbySection() {
+        return statusLobbySection;
     }
 }

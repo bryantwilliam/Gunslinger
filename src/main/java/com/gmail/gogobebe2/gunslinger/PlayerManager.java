@@ -1,6 +1,6 @@
 package com.gmail.gogobebe2.gunslinger;
 
-import com.gmail.gogobebe2.gunslinger.selection.Lobby;
+import com.gmail.gogobebe2.gunslinger.lobby.Lobby;
 import com.gmail.gogobebe2.gunslinger.selection.define.SpawnData;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

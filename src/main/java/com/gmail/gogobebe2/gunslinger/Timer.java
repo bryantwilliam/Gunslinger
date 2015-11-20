@@ -16,6 +16,14 @@ public abstract class Timer {
         start();
     }
 
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public int getSecondsInMinute() {
+        return seconds;
+    }
+
     protected void setTime(String timeFormat) {
         String[] times = timeFormat.split(":");
         if (times[0].equalsIgnoreCase("")) {
@@ -32,7 +40,7 @@ public abstract class Timer {
 
     }
 
-    protected String getTime() {
+    public String getTime() {
         if (seconds < 10) {
             return minutes + ":0" + seconds;
         }
@@ -61,7 +69,7 @@ public abstract class Timer {
         }, 0L, 210);
     }
 
-    protected boolean isTimerRunning() {
+    public boolean isTimerRunning() {
         return isTimerRunning;
     }
 

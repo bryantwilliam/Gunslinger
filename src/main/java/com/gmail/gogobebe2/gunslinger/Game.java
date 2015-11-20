@@ -9,4 +9,6 @@ import java.util.List;
 public class Game {
     private List<Player> players = new ArrayList<>();
     private Arena arena;
+
+    private enum GameState {STARTING, STARTED, STOPPING, STOPPED}
 }
