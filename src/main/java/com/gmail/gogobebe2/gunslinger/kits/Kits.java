@@ -1,6 +1,7 @@
 package com.gmail.gogobebe2.gunslinger.kits;
 
 import com.gmail.gogobebe2.gunslinger.Main;
+import com.gmail.gogobebe2.gunslinger.PlayerManager;
 import com.gmail.gogobebe2.gunslinger.command.Command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,15 +13,9 @@ import org.bukkit.permissions.Permission;
 import java.util.Set;
 
 public final class Kits {
+
     protected static void apply(String name, Player player) throws NullPointerException {
-        // TODO:
-        // [x] Inventory - Armour, Contents and Held Item Slot.
-        // [ ] Potion Effects
-        // [ ] Exp
-        // [ ] Health
-        // [ ] Hunger
-        // [ ] Gamemode
-        // [ ] Flying
+        // Inventory:
         name = name.toLowerCase();
         String configPrefix = "Kits." + name;
         Main plugin = Main.getInstance();
@@ -34,24 +29,41 @@ public final class Kits {
         }
 
         player.getInventory().setContents(contents);
+
+        // Exp:
+        player.setExp((float) plugin.getConfig().getDouble(configPrefix + ".exp"));
+
+        // MaxHealth:
+        player.setMaxHealth((plugin.getConfig().getDouble(configPrefix + ".maxHealth")));
     }
 
     protected static void create(String name, Player player) {
+
         name = name.toLowerCase();
-        String configPrefix = "Kits." + name + ".inventory";
+        String configPrefix = "Kits." + name + ".";
         Main plugin = Main.getInstance();
+
+        // Inventory:
         PlayerInventory inventory = player.getInventory();
         ItemStack[] contents = inventory.getContents();
         ItemStack[] armour = inventory.getArmorContents();
         for (int slot = 0; slot < contents.length; slot++) {
-            plugin.getConfig().set(configPrefix + ".contentsSlots." + slot, contents[slot]);
+            plugin.getConfig().set(configPrefix + "inventory.contentsSlots." + slot, contents[slot]);
         }
         for (int slot = 0; slot < armour.length; slot++) {
-            plugin.getConfig().set(configPrefix + ".armourSlots." + slot, armour[slot]);
+            plugin.getConfig().set(configPrefix + "inventory.armourSlots." + slot, armour[slot]);
         }
+
+        // Exp:
+        plugin.getConfig().set(configPrefix + "exp", player.getExp());
+
+        // MaxHealth:
+        plugin.getConfig().set(configPrefix + "maxHealth", player.getMaxHealth());
+
         plugin.saveConfig();
+
         final String finalName = name;
-        KitMainCommand.getLegalSubCommands().put("name", new Command() {
+        KitMainCommand.getLegalSubCommands().put(name, new Command() {
             @Override
             protected void onCommand(CommandSender commandSender, String[] args) {
                 Permission permission = new Permission("gs.kits.use." + finalName);
@@ -65,7 +77,7 @@ public final class Kits {
                     return;
                 }
                 Player player = (Player) commandSender;
-                // TODO: Select kit for that player later on when the lobby starts.
+                PlayerManager.getPlayerManager(player.getUniqueId()).setKitName(finalName);
                 apply(finalName, player);
             }
         });

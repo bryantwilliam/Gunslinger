@@ -28,7 +28,7 @@ public class LobbyTimer extends Timer {
 
     @Override
     protected void pause() {
-        if (lobby.getState() == LobbyState.WAITING) {
+        if (lobby.getState() == LobbyState.WAITING || lobby.getState().equals(LobbyState.INACTIVE)) {
             setTime(Integer.MAX_VALUE + ":");
             start();
         }

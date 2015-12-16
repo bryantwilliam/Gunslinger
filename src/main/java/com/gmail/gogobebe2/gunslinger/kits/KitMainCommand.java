@@ -1,14 +1,14 @@
 package com.gmail.gogobebe2.gunslinger.kits;
 
 import com.gmail.gogobebe2.gunslinger.command.Command;
-import com.gmail.gogobebe2.gunslinger.command.MultidimensionalCommand;
+import com.gmail.gogobebe2.gunslinger.command.RecursiveCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class KitMainCommand extends MultidimensionalCommand {
+public final class KitMainCommand extends RecursiveCommand {
     private static Map<String, Command> legalSubCommands = new HashMap<>();
 
     @Override

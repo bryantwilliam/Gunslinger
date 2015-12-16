@@ -6,10 +6,10 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.Map;
 
-public abstract class MultidimensionalCommand extends Command {
+public abstract class RecursiveCommand extends Command {
     private Map<String, Command> legalSubCommands;
 
-    protected MultidimensionalCommand() {
+    protected RecursiveCommand() {
         this.legalSubCommands = initializeLegalSubCommands();
     }
 

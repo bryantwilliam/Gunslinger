@@ -28,6 +28,7 @@ public class Lobby extends Selection {
     private StatusLobbySection statusLobbySection;
     private LobbyTimer timer;
     protected static final short MIN_PLAYERS = 3;
+    protected static final short MAX_PLAYERS = 8;
     protected static final String STARTING_TIME = "1:30";
     protected static final String GAME_TIME = "15:00";
 
@@ -85,8 +86,9 @@ public class Lobby extends Selection {
         return players.contains(player);
     }
 
-    protected void join(Player player) {
+    public void join(Player player) {
         players.add(player);
+        player.teleport(getSpawns().get(0));
         player.setScoreboard(scoreboard);
     }
 
@@ -111,5 +113,13 @@ public class Lobby extends Selection {
 
     protected StatusLobbySection getStatusLobbySection() {
         return statusLobbySection;
+    }
+
+    public static List<Lobby> getLobbies() {
+        return lobbies;
+    }
+
+    public boolean isFull() {
+        return getPlayerAmount() >= MAX_PLAYERS;
     }
 }

@@ -3,14 +3,14 @@ package com.gmail.gogobebe2.gunslinger.selection;
 import com.gmail.gogobebe2.gunslinger.selection.define.Point;
 import org.bukkit.Location;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public abstract class Selection {
     private Point point1;
     private Point point2;
-    private Set<Location> spawns = new HashSet<>();
+    private List<Location> spawns = new ArrayList<>();
 
     protected Point getPoint1() {
         return point1;
@@ -20,7 +20,7 @@ public abstract class Selection {
         return point2;
     }
 
-    protected Set<Location> getSpawns() {
+    protected List<Location> getSpawns() {
         return spawns;
     }
 

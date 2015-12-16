@@ -13,7 +13,7 @@ public final class Main extends JavaPlugin {
         instance = this;
         getLogger().info("Starting up " + this.getName() + ". If you need me to update this plugin, email at gogobebe2@gmail.com");
         Bukkit.getPluginManager().registerEvents(new SelectionListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerManager(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerManager.PlayerListener(), this);
         Bukkit.getPluginManager().registerEvents(new LobbyChooser(), this);
 
         getCommand("gunslinger").setExecutor(new MainCommand());

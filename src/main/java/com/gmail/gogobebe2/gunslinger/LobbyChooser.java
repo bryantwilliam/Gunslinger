@@ -1,9 +1,10 @@
 package com.gmail.gogobebe2.gunslinger;
 
+import com.gmail.gogobebe2.gunslinger.lobby.Lobby;
+import com.gmail.gogobebe2.gunslinger.lobby.LobbyState;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,14 +38,22 @@ public class LobbyChooser implements Listener {
     protected static void onInventoryClickEvent(InventoryClickEvent event) {
         if (event.getInventory().getName().equals(GUI_NAME)) {
             event.setCancelled(true);
-            HumanEntity clicker = event.getWhoClicked();
+            Player clicker = (Player) event.getWhoClicked();
+            ItemStack button = event.getClickedInventory().getItem(event.getSlot());
+            if (button.getType() == Material.REDSTONE_BLOCK)
+                clicker.sendMessage(ChatColor.RED + "Error! This lobby is inactive at the moment!");
+            else {
+                int lobbyID = Integer.parseInt(button.getItemMeta().getDisplayName().replace("Lobby ", ""));
+                Lobby lobby = Lobby.getLobbies().get(lobbyID - 1);
+                clicker.sendMessage(ChatColor.GREEN + "Joining lobby " + lobbyID + "...");
+                lobby.join(clicker);
+            }
         }
     }
 
     @EventHandler
     protected static void onInventoryDragEvent(InventoryMoveItemEvent event) {
-        if (event.getDestination().getName().equals(GUI_NAME)) event.setCancelled(true);
-
+        if (event.getDestination().getName().equals(GUI_NAME) || event.getSource().getName().equals(GUI_NAME)) event.setCancelled(true);
     }
 
     private static ItemStack initItem() {
@@ -61,6 +70,17 @@ public class LobbyChooser implements Listener {
     protected static void openGUI(Player player) {
         player.sendMessage(ChatColor.GREEN + "Opening Lobby Selector GUI");
         Inventory inventory = Bukkit.createInventory(null, 9, GUI_NAME);
+        int lobbyNumber = 1;
+        for (Lobby lobby : Lobby.getLobbies()) {
+            ItemStack button;
+            if (lobby.getState().equals(LobbyState.INACTIVE) || lobby.isFull())
+                button = new ItemStack(Material.REDSTONE_BLOCK, 1);
+            else button = new ItemStack(Material.EMERALD_BLOCK, 1);
+            ItemMeta meta = button.getItemMeta();
+            meta.setDisplayName("Lobby " + lobbyNumber);
+            button.setItemMeta(meta);
+            inventory.addItem();
+        }
         player.openInventory(inventory);
     }
 }

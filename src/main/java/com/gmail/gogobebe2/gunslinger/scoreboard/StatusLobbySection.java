@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-public class StatusLobbySection extends StatusSection {
+public final class StatusLobbySection extends StatusSection {
     private Lobby lobby;
 
     public StatusLobbySection(Scoreboard scoreboard, Objective objective, Lobby lobby) {

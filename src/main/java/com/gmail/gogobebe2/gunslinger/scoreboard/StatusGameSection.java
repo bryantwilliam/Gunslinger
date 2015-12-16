@@ -3,7 +3,7 @@ package com.gmail.gogobebe2.gunslinger.scoreboard;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-public class StatusGameSection extends StatusSection {
+public final class StatusGameSection extends StatusSection {
     public StatusGameSection(Scoreboard scoreboard, Objective objective) {
         super(scoreboard, objective);
     }
